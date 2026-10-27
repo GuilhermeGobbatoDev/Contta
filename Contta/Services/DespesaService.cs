@@ -1,6 +1,7 @@
 ﻿using Contta.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 
 namespace Contta.Services
 {
@@ -78,6 +79,27 @@ namespace Contta.Services
                 throw new ArgumentException("Valor inválido!");
             }
 
+            if (string.IsNullOrWhiteSpace(novosDados.Descricao))
+            {
+                throw new ArgumentException("A descrição é obrigatória.");
+            }
+
+            if (string.IsNullOrWhiteSpace(novosDados.Categoria))
+            {
+                throw new ArgumentException("A categoria é obrigatória.");
+            }
+
+            if (novosDados.Data == default(DateTime))
+            {
+                throw new ArgumentException("A data é obrigatória.");
+            }
+
+            despesaEncontrada.Descricao = novosDados.Descricao;
+
+            despesaEncontrada.Categoria = novosDados.Categoria;
+
+            despesaEncontrada.Data = novosDados.Data;
+
             despesaEncontrada.Valor = novosDados.Valor;
 
             return true;
@@ -93,8 +115,32 @@ namespace Contta.Services
             }
 
             return _despesas.Remove(encontradaExclusao);
-                
+
         }
 
+        public List<Despesas> FiltrarDespesasPorCategoria(string categoriaPesquisada)
+        {
+            if (string.IsNullOrWhiteSpace(categoriaPesquisada))
+            {
+                throw new ArgumentException("Por favor, digite uma categoria!");
+            }
+            
+            return _despesas.Where(despesa => despesa.Categoria.ToLower().Trim() == categoriaPesquisada.ToLower().Trim()).ToList();
+        }
+
+        public List<Despesas> FiltrarDespesasPorData(int mesPesquisado, int anoPesquisado)
+        {
+            if (mesPesquisado < 1 || mesPesquisado > 12 )
+            {
+                throw new ArgumentException("Digite um mês valido!");
+            }
+
+            if (anoPesquisado < 1)
+            {
+                throw new ArgumentException("Digite um ano válido!");
+            }
+
+            return _despesas.Where(data => data.Data.Month == mesPesquisado && data.Data.Year == anoPesquisado).ToList();
+        }
     }
 }
