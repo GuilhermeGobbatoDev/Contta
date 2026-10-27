@@ -1,0 +1,20 @@
+@Contta.Api_HostAddress = https://localhost:7264
+
+### Listar despesas
+GET {{Contta.Api_HostAddress}}/api/despesas
+Accept: application/json
+
+### Cadastrar despesa
+POST {{Contta.Api_HostAddress}}/api/despesas
+Content-Type: application/json
+
+{
+  "descricao": "Mercado",
+  "valor": 150.50,
+  "categoria": "Alimentação",
+  "data": "2026-10-27"
+}
+
+### Buscar despesa pelo ID
+GET {{Contta.Api_HostAddress}}/api/despesas/1
+Accept: application/json

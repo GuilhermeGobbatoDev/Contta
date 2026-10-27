@@ -1,3 +1,4 @@
 <Solution>
-  <Project Path="Contta/Contta.csproj" />
+  <Project Path="Contta.Api/Contta.Api.csproj" Id="3a39842e-0c55-4adb-819c-ac331136dac1" />
+  <Project Path="Contta.Core/Contta.Core.csproj" Id="99888e5a-0a11-43a9-ba71-1f65a64b4775" />
 </Solution>
