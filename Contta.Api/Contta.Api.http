@@ -18,3 +18,26 @@ Content-Type: application/json
 ### Buscar despesa pelo ID
 GET {{Contta.Api_HostAddress}}/api/despesas/1
 Accept: application/json
+
+### Excluir Despesa
+DELETE {{Contta.Api_HostAddress}}/api/despesas/1
+
+### Editar Despesa
+PUT {{Contta.Api_HostAddress}}/api/despesas/999
+Content-Type: application/json
+
+{
+  "descricao": "Supermercado",
+  "valor": 300.50,
+  "categoria": "Compras",
+  "data": "2026-10-28"
+}
+
+### Pesquisar por descrição
+GET {{Contta.Api_HostAddress}}/api/despesas/pesquisar?descricao=Mercado
+
+### Pesquisar por categoria
+GET {{Contta.Api_HostAddress}}/api/despesas/categoria?categoria=Alimentação
+
+### Pesquisar por data
+GET {{Contta.Api_HostAddress}}/api/despesas/data?mes=10&ano=2026

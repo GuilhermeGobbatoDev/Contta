@@ -12,6 +12,7 @@ namespace Contta.Services
 
         public void CadastrarDespesa(Despesas despesa)
         {
+
             // Verifica se o objeto existe
             if (despesa == null)
             {
@@ -118,14 +119,24 @@ namespace Contta.Services
 
         }
 
+        public List<Despesas> PesquisarPorDescricao(string descricaoPesquisada)
+        {
+            if (string.IsNullOrWhiteSpace(descricaoPesquisada))
+            {
+                throw new ArgumentException("Por favor, digite o nome da despesa!");
+            }
+
+            return _despesas.Where(despesa => despesa.Descricao.ToLower().Trim() == descricaoPesquisada.Trim().ToLower()).ToList();
+        }
+
         public List<Despesas> FiltrarDespesasPorCategoria(string categoriaPesquisada)
         {
             if (string.IsNullOrWhiteSpace(categoriaPesquisada))
             {
                 throw new ArgumentException("Por favor, digite uma categoria!");
             }
-            
-            return _despesas.Where(despesa => despesa.Categoria.ToLower().Trim() == categoriaPesquisada.ToLower().Trim()).ToList();
+
+            return _despesas.Where(despesa => despesa.Categoria.ToLower().Trim().Contains(categoriaPesquisada.ToLower().Trim())).ToList();
         }
 
         public List<Despesas> FiltrarDespesasPorData(int mesPesquisado, int anoPesquisado)
