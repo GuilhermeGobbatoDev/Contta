@@ -1,4 +1,5 @@
 ﻿using Contta.Models;
+using Contta.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
@@ -7,6 +8,13 @@ namespace Contta.Services
 {
     public class DespesaService
     {
+        private readonly IDespesaRepository _repository;
+
+        public DespesaService(IDespesaRepository repository)
+        {
+            _repository = repository;
+        }
+        
         private readonly List<Despesas> _despesas = new();
         private int _proximoId = 1;
 
