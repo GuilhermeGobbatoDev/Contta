@@ -38,22 +38,10 @@ namespace Contta.Api.Controllers
         {
 
             var despesas = _despesaService.ListarDespesas();
+          
+                var resposta = ConverterParaDTOs(despesas);
 
-            var resposta = despesas.Select(despesa => new DespesaRespostaDTO
-            {
-                Descricao = despesa.Descricao,
-
-                Valor = despesa.Valor,
-
-                Categoria = despesa.Categoria,
-
-                Data = despesa.Data,
-
-                Id = despesa.Id
-            }).ToList();
-            
-            return Ok(resposta);
-
+                return Ok(resposta);
         }
 
         [HttpPost]
