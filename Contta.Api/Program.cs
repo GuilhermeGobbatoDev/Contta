@@ -6,7 +6,7 @@ using Contta.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddSingleton<DespesaService>();
+builder.Services.AddScoped<DespesaService>();
 
 builder.Services.AddDbContext<ConttaDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("ConttaDb")));
 

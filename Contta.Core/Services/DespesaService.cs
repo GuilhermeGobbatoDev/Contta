@@ -16,7 +16,6 @@ namespace Contta.Services
         }
         
         private readonly List<Despesas> _despesas = new();
-        private int _proximoId = 1;
 
         public void CadastrarDespesa(Despesas despesa)
         {
@@ -51,11 +50,9 @@ namespace Contta.Services
                 throw new ArgumentException("A data é obrigatória.");
             }
 
-            //Adiciona 1 ao id
-            despesa.Id = _proximoId++;
+            //Insere a despesa no BD
+            _repository.Adicionar(despesa);
 
-            // Adiciona a despesa à lista
-            _despesas.Add(despesa);
         }
         public List<Despesas> ListarDespesas()
         {
