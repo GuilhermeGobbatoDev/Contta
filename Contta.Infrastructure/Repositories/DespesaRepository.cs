@@ -24,6 +24,10 @@ namespace Contta.Infrastructure.Repositories
             _context.SaveChanges();
         }
 
+        public List<Despesas> Listar()
+        {
+            return _context.Despesas.ToList();
+        }
        
     }
 }
