@@ -8,5 +8,7 @@ namespace Contta.Core.Interfaces
     public interface IDespesaRepository
     {
         void Adicionar(Despesas despesa);
+
+        List<Despesas> Listar();
     }
 }

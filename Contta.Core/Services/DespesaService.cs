@@ -56,7 +56,7 @@ namespace Contta.Services
         }
         public List<Despesas> ListarDespesas()
         {
-            return new List <Despesas>(_despesas);
+           return _repository.Listar();
         }
 
         public decimal CalcularTotalDespesas()
