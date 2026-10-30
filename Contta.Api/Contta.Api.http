@@ -23,7 +23,7 @@ Accept: application/json
 DELETE {{Contta.Api_HostAddress}}/api/despesas/1
 
 ### Editar Despesa
-PUT {{Contta.Api_HostAddress}}/api/despesas/999
+PUT {{Contta.Api_HostAddress}}/api/despesas/1
 Content-Type: application/json
 
 {
@@ -41,3 +41,6 @@ GET {{Contta.Api_HostAddress}}/api/despesas/categoria?categoria=Alimentação
 
 ### Pesquisar por data
 GET {{Contta.Api_HostAddress}}/api/despesas/data?mes=10&ano=2026
+
+### Calcular Total
+GET {{Contta.Api_HostAddress}}/api/despesas/total

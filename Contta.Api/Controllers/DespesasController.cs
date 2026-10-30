@@ -199,5 +199,14 @@ namespace Contta.Api.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("Total")]
+        public IActionResult CalcularTotalDespesas()
+        {
+            var totalCalculado = _despesaService.CalcularTotal();
+            
+            return Ok(totalCalculado);   
+            
+        }
     }
 }

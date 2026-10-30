@@ -10,5 +10,19 @@ namespace Contta.Core.Interfaces
         void Adicionar(Despesas despesa);
 
         List<Despesas> Listar();
+
+        Despesas? BuscarPorId(int id);
+
+        void Atualizar(Despesas despesa);
+
+        void Deletar(Despesas despesas);
+
+        List<Despesas> PesquisarPorDescricao(string descricao);
+
+        List<Despesas> PesquisarPorCategoria(string categoria);
+
+        List<Despesas> PesquisarPorData(int mes, int ano);
+
+        decimal CalcularTotal();
     }
 }

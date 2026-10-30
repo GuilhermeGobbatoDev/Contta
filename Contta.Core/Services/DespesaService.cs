@@ -2,7 +2,7 @@
 using Contta.Core.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
+
 
 namespace Contta.Services
 {
@@ -15,8 +15,6 @@ namespace Contta.Services
             _repository = repository;
         }
         
-        private readonly List<Despesas> _despesas = new();
-
         public void CadastrarDespesa(Despesas despesa)
         {
 
@@ -59,15 +57,15 @@ namespace Contta.Services
            return _repository.Listar();
         }
 
-        public decimal CalcularTotalDespesas()
+        public decimal CalcularTotal()
         {
-            //Percorre a lista e soma os valores
-            return _despesas.Sum(d => d.Valor);
+            //Calcula o total direto do banco
+            return _repository.CalcularTotal();
         }
 
         public Despesas? BuscarDespesaPorId(int id)
         {
-           return _despesas.FirstOrDefault(despesa => despesa.Id == id);
+            return _repository.BuscarPorId(id);
 
         }
 
@@ -108,6 +106,8 @@ namespace Contta.Services
 
             despesaEncontrada.Valor = novosDados.Valor;
 
+            _repository.Atualizar(despesaEncontrada);
+
             return true;
         }
 
@@ -120,7 +120,9 @@ namespace Contta.Services
                 return false;
             }
 
-            return _despesas.Remove(encontradaExclusao);
+            _repository.Deletar(encontradaExclusao);
+
+            return true;
 
         }
 
@@ -131,7 +133,7 @@ namespace Contta.Services
                 throw new ArgumentException("Por favor, digite o nome da despesa!");
             }
 
-            return _despesas.Where(despesa => despesa.Descricao.ToLower().Trim() == descricaoPesquisada.Trim().ToLower()).ToList();
+            return _repository.PesquisarPorDescricao(descricaoPesquisada);
         }
 
         public List<Despesas> FiltrarDespesasPorCategoria(string categoriaPesquisada)
@@ -141,7 +143,7 @@ namespace Contta.Services
                 throw new ArgumentException("Por favor, digite uma categoria!");
             }
 
-            return _despesas.Where(despesa => despesa.Categoria.ToLower().Trim().Contains(categoriaPesquisada.ToLower().Trim())).ToList();
+            return _repository.PesquisarPorCategoria(categoriaPesquisada);
         }
 
         public List<Despesas> FiltrarDespesasPorData(int mesPesquisado, int anoPesquisado)
@@ -156,7 +158,7 @@ namespace Contta.Services
                 throw new ArgumentException("Digite um ano válido!");
             }
 
-            return _despesas.Where(data => data.Data.Month == mesPesquisado && data.Data.Year == anoPesquisado).ToList();
+            return _repository.PesquisarPorData(mesPesquisado, anoPesquisado);
         }
     }
 }
