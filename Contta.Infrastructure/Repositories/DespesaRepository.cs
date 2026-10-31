@@ -65,5 +65,10 @@ namespace Contta.Infrastructure.Repositories
         {
             return _context.Despesas.Sum(despesa => despesa.Valor);
         }
+
+        public List<Despesas> PesquisarPorValor(decimal valor)
+        {
+            return _context.Despesas.Where(despesa => despesa.Valor > valor).ToList();
+        }
     }
 }

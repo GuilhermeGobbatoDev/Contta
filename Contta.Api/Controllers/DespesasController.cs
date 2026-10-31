@@ -39,7 +39,7 @@ namespace Contta.Api.Controllers
 
             var despesas = _despesaService.ListarDespesas();
           
-                var resposta = ConverterParaDTOs(despesas);
+            var resposta = ConverterParaDTOs(despesas);
 
                 return Ok(resposta);
         }
@@ -207,6 +207,23 @@ namespace Contta.Api.Controllers
             
             return Ok(totalCalculado);   
             
+        }
+
+        [HttpGet("Despesa-Maior")]
+        public IActionResult BuscarDespesasAcimaDe(decimal valor)
+        {
+            try 
+            {
+
+                var despesaAcimaDeEncontrada = _despesaService.PesquisarPorValor(valor);
+
+                return Ok(despesaAcimaDeEncontrada);
+              
+            }
+            catch (ArgumentException ex)
+            {
+                   return BadRequest(ex.Message);
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ Accept: application/json
 DELETE {{Contta.Api_HostAddress}}/api/despesas/1
 
 ### Editar Despesa
-PUT {{Contta.Api_HostAddress}}/api/despesas/1
+PUT {{Contta.Api_HostAddress}}/api/despesas/3
 Content-Type: application/json
 
 {

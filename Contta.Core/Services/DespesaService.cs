@@ -2,6 +2,7 @@
 using Contta.Core.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 
 namespace Contta.Services
@@ -159,6 +160,16 @@ namespace Contta.Services
             }
 
             return _repository.PesquisarPorData(mesPesquisado, anoPesquisado);
+        }
+
+        public List<Despesas> PesquisarPorValor(decimal valor)
+        {
+            if (valor <= 0)
+            {
+                throw new ArgumentException("Digite um valor maior que 0");
+            }
+
+            return _repository.PesquisarPorValor(valor);
         }
     }
 }
