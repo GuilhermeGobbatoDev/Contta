@@ -39,6 +39,11 @@ export default function App() {
             try {
                 let url = API_URL
 
+                if (filters.minValue !== '' && Number(filters.minValue) <= 0) {
+                    setToast("Por favor, digite um valor maior que 0!")
+                    return
+                }
+
                 if (filters.minValue !== "")
                 {
                     url = `${API_URL}/Despesa-Maior?valor=${filters.minValue}`
@@ -48,6 +53,7 @@ export default function App() {
                 if (!resposta.ok) {
                     throw new Error('Erro ao buscar despesas')
                 }
+
 
                 const dados = await resposta.json()
 
