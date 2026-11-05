@@ -23,7 +23,7 @@ namespace Contta.Core.Interfaces
 
         List<Despesas> PesquisarPorData(int mes, int ano);
 
-        List<Despesas> PesquisarPorValor(decimal valor);
+        List<Despesas> PesquisarPorValorAcima(decimal valor);
 
         decimal CalcularTotal();
     }
