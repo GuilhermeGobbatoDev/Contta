@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using Microsoft.AspNetCore.Identity;
 
 namespace Contta.Infrastructure.Identity
 {
-    internal class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser
     {
+        public string NomeCompleto { get; set; } = string.Empty;
     }
 }
