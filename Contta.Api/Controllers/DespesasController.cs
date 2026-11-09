@@ -4,10 +4,12 @@ using Contta.Services;
 using System.Security.Cryptography.X509Certificates;
 using Contta.Models;
 using Contta.Api.DTOs;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Contta.Api.Controllers
 {
-     
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DespesasController : ControllerBase
@@ -36,8 +38,14 @@ namespace Contta.Api.Controllers
         [HttpGet]
         public IActionResult Listar()
         {
+            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var despesas = _despesaService.ListarDespesas();
+            if (string.IsNullOrWhiteSpace(usuarioId))
+            {
+                return Unauthorized();
+            }
+
+            var despesas = _despesaService.ListarDespesas(usuarioId);
           
             var resposta = ConverterParaDTOs(despesas);
 
@@ -47,6 +55,12 @@ namespace Contta.Api.Controllers
         [HttpPost]
         public IActionResult Cadastrar([FromBody] CriarDespesaDTO despesa)
         {
+            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrWhiteSpace(usuarioId))
+            {
+                return Unauthorized();
+            }
             var novaDespesa = new Despesas
             {
                 Descricao = despesa.Descricao,
@@ -61,7 +75,7 @@ namespace Contta.Api.Controllers
             
             try
             {
-                _despesaService.CadastrarDespesa(novaDespesa);
+                _despesaService.CadastrarDespesa(novaDespesa, usuarioId);
             }
             catch (ArgumentException ex)
             {
@@ -74,8 +88,14 @@ namespace Contta.Api.Controllers
         [HttpGet("{id}")]
         public IActionResult Buscar(int id)
         {
+            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrWhiteSpace(usuarioId))
+            {
+                return Unauthorized();
+            }
             
-            var despesa = _despesaService.BuscarDespesaPorId(id);
+            var despesa = _despesaService.BuscarDespesaPorId(id, usuarioId);
 
             if (despesa == null)
             {
@@ -101,7 +121,13 @@ namespace Contta.Api.Controllers
         [HttpDelete("{id}")]
         public IActionResult Excluir(int id)
         {
-            var excluida = _despesaService.ExcluirDespesa(id);
+            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            if (string.IsNullOrWhiteSpace(usuarioId))
+            {
+                return Unauthorized();
+            }
+            var excluida = _despesaService.ExcluirDespesa(id, usuarioId);
 
             if (!excluida)
             {
@@ -115,6 +141,13 @@ namespace Contta.Api.Controllers
         [HttpPut("{id}")]
         public IActionResult Editar(int id, [FromBody] AtualizarDespesaDTO novosDados)
         {
+            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            if (string.IsNullOrWhiteSpace(usuarioId))
+            {
+                return Unauthorized();
+            }
+
             var dadoAtualizado = new Despesas
             {
                 Descricao = novosDados.Descricao,
@@ -127,7 +160,7 @@ namespace Contta.Api.Controllers
             };
             try 
             {
-                var editado = _despesaService.EditarDespesa(id, dadoAtualizado);
+                var editado = _despesaService.EditarDespesa(id, dadoAtualizado, usuarioId);
                 if (!editado)
             {
                 return NotFound("Nenhuma despesa encontrada!");
@@ -147,11 +180,16 @@ namespace Contta.Api.Controllers
         [HttpGet("pesquisar")]
         public IActionResult PesquisarPorDescricao([FromQuery] string descricao)
         {
-            
-            
+            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrWhiteSpace(usuarioId))
+            {
+                return Unauthorized();
+            }
+
             try
             {
-                var despesa = _despesaService.PesquisarPorDescricao(descricao);
+                var despesa = _despesaService.PesquisarPorDescricao(descricao, usuarioId);
                 
                 var resposta = ConverterParaDTOs(despesa);
 
@@ -167,10 +205,16 @@ namespace Contta.Api.Controllers
         [HttpGet("categoria")]
         public IActionResult PesquisarPorCategoria([FromQuery] string categoria)
         {
-            
+            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrWhiteSpace(usuarioId))
+            {
+                return Unauthorized();
+            }
+
             try
             {
-                var despesa = _despesaService.FiltrarDespesasPorCategoria(categoria);
+                var despesa = _despesaService.FiltrarDespesasPorCategoria(categoria, usuarioId);
 
                 var resposta = ConverterParaDTOs(despesa);
 
@@ -185,10 +229,16 @@ namespace Contta.Api.Controllers
         [HttpGet("data")]
         public IActionResult PesquisarPorData([FromQuery] int mes, [FromQuery] int ano)
         {
+            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrWhiteSpace(usuarioId))
+            {
+                return Unauthorized();
+            }
 
             try
             {
-                var despesa = _despesaService.FiltrarDespesasPorData(mes, ano);
+                var despesa = _despesaService.FiltrarDespesasPorData(mes, ano, usuarioId);
 
                 var resposta = ConverterParaDTOs(despesa);
 
@@ -203,7 +253,14 @@ namespace Contta.Api.Controllers
         [HttpGet("Total")]
         public IActionResult CalcularTotalDespesas()
         {
-            var totalCalculado = _despesaService.CalcularTotal();
+            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrWhiteSpace(usuarioId))
+            {
+                return Unauthorized();
+            }
+
+            var totalCalculado = _despesaService.CalcularTotal(usuarioId);
             
             return Ok(totalCalculado);   
             
@@ -212,12 +269,20 @@ namespace Contta.Api.Controllers
         [HttpGet("Despesa-Maior")]
         public IActionResult BuscarDespesasAcimaDe(decimal valor)
         {
+            var usuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrWhiteSpace(usuarioId))
+            {
+                return Unauthorized();
+            }
+
             try 
             {
 
-                var despesaAcimaDeEncontrada = _despesaService.PesquisarPorValor(valor);
+                var despesaAcimaDeEncontrada = _despesaService.PesquisarPorValor(valor, usuarioId);
+                var resposta = ConverterParaDTOs(despesaAcimaDeEncontrada);
 
-                return Ok(despesaAcimaDeEncontrada);
+                return Ok(resposta);
               
             }
             catch (ArgumentException ex)

@@ -61,3 +61,9 @@ Content-Type: application/json
   "email": "joao.teste@example.com",
   "senha": "Contta@123"
 }
+
+### Obter Despesa com token
+GET {{Contta.Api_HostAddress}}/api/despesas
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImFlMDJkZTE2LTMyMzktNDFlMi04MzllLTY5NDRhNmY0YzZhYyIsImV4cCI6MTc5NDI1MzAxNiwiaXNzIjoiQ29udHRhIiwiYXVkIjoiQ29udHRhLkFwaSJ9.L23oJwYh259Ygiw0PEsoIzR-B1zb7HTt-_toUo7fSUQ
+
+

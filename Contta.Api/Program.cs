@@ -1,11 +1,12 @@
+using Contta.Api.Services;
 using Contta.Core.Interfaces;
 using Contta.Infrastructure.Data;
 using Contta.Infrastructure.Identity;
 using Contta.Infrastructure.Repositories;
 using Contta.Models;
 using Contta.Services;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,8 @@ builder.Services.AddDbContext<ConttaDbContext>(options => options.UseNpgsql(buil
 builder.Services.AddIdentityCore<ApplicationUser>(options => { options.User.RequireUniqueEmail = true; }).AddEntityFrameworkStores<ConttaDbContext>();
 
 builder.Services.AddScoped<IDespesaRepository, DespesaRepository>();
+
+builder.Services.AddScoped<JwtTokenService>();
 
 var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("Chave JWT não configurada.");
 
@@ -69,6 +72,8 @@ if (app.Environment.IsDevelopment())
 app.UseCors("ConttaWeb");
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

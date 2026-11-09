@@ -4,21 +4,27 @@ using Contta.Services;
 using System.Security.Cryptography.X509Certificates;
 using Contta.Models;
 using Contta.Api.DTOs;
+using Contta.Api.Services;
 using Contta.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 
 
 namespace Contta.Api.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
+    
     public class AuthController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public AuthController(UserManager<ApplicationUser> userManager)
+        private readonly JwtTokenService _jwtTokenService;
+
+        public AuthController(UserManager<ApplicationUser> userManager, JwtTokenService jwtTokenService)
         {
             _userManager = userManager;
+            _jwtTokenService = jwtTokenService;
         }
 
         [HttpPost("registrar")]
@@ -57,7 +63,9 @@ namespace Contta.Api.Controllers
                 return Unauthorized("E-mail ou senha inválidos.");
             }
 
-            return Ok();
+            var token = _jwtTokenService.GerarToken(usuario);
+
+            return Ok(new {token});
         }
        
     }
