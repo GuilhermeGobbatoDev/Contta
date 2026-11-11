@@ -44,3 +44,26 @@ GET {{Contta.Api_HostAddress}}/api/despesas/data?mes=10&ano=2026
 
 ### Calcular Total
 GET {{Contta.Api_HostAddress}}/api/despesas/total
+
+### Cadastrar usuario
+POST {{Contta.Api_HostAddress}}/api/auth/registrar
+Content-Type: application/json
+{
+  "nomeCompleto": "João Silva",
+  "email": "joao.teste@example.com",
+  "senha": "Contta@123"
+}
+
+### Fazer login
+POST {{Contta.Api_HostAddress}}/api/auth/login
+Content-Type: application/json
+{
+  "email": "joao.teste@example.com",
+  "senha": "Contta@123"
+}
+
+### Obter Despesa com token
+GET {{Contta.Api_HostAddress}}/api/despesas
+Authorization: Bearer SEU_TOKEN_AQUI
+
+

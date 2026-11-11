@@ -1,11 +1,13 @@
-﻿using Contta.Models;
+﻿using Contta.Infrastructure.Identity;
+using Contta.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace Contta.Infrastructure.Data
 
 {
-    public class ConttaDbContext : DbContext
+    public class ConttaDbContext : IdentityDbContext<ApplicationUser>
     {
         public ConttaDbContext (DbContextOptions<ConttaDbContext> options) : base(options)
         {
@@ -16,8 +18,9 @@ namespace Contta.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-      
-           modelBuilder.Entity<Despesas>().Property(despesa => despesa.Data).HasColumnType("date");
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Despesas>().Property(despesa => despesa.Data).HasColumnType("date");
 
         }
     }

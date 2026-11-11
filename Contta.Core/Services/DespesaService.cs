@@ -16,8 +16,13 @@ namespace Contta.Services
             _repository = repository;
         }
         
-        public void CadastrarDespesa(Despesas despesa)
+        public void CadastrarDespesa(Despesas despesa, string usuarioId)
         {
+            //Valida o usuario
+            if (string.IsNullOrWhiteSpace(usuarioId))
+            {
+                throw new ArgumentException("Por favor, faça o login!");
+            }
 
             // Verifica se o objeto existe
             if (despesa == null)
@@ -49,30 +54,32 @@ namespace Contta.Services
                 throw new ArgumentException("A data é obrigatória.");
             }
 
+            despesa.UsuarioId = usuarioId;
+
             //Insere a despesa no BD
             _repository.Adicionar(despesa);
 
         }
-        public List<Despesas> ListarDespesas()
+        public List<Despesas> ListarDespesas(string usuarioId)
         {
-           return _repository.Listar();
+           return _repository.Listar(usuarioId);
         }
 
-        public decimal CalcularTotal()
+        public decimal CalcularTotal(string usuarioId)
         {
             //Calcula o total direto do banco
-            return _repository.CalcularTotal();
+            return _repository.CalcularTotal(usuarioId);
         }
 
-        public Despesas? BuscarDespesaPorId(int id)
+        public Despesas? BuscarDespesaPorId(int id, string usuarioId)
         {
-            return _repository.BuscarPorId(id);
+            return _repository.BuscarPorId(id, usuarioId);
 
         }
 
-        public bool EditarDespesa(int id, Despesas novosDados)
+        public bool EditarDespesa(int id, Despesas novosDados, string usuarioId)
         {
-            Despesas? despesaEncontrada = BuscarDespesaPorId(id);
+            Despesas? despesaEncontrada = BuscarDespesaPorId(id, usuarioId);
 
             if (despesaEncontrada == null)
             {
@@ -112,9 +119,9 @@ namespace Contta.Services
             return true;
         }
 
-        public bool ExcluirDespesa(int id)
+        public bool ExcluirDespesa(int id, string usuarioId)
         {
-            Despesas? encontradaExclusao = BuscarDespesaPorId(id);
+            Despesas? encontradaExclusao = BuscarDespesaPorId(id, usuarioId);
 
             if (encontradaExclusao == null)
             {
@@ -127,27 +134,27 @@ namespace Contta.Services
 
         }
 
-        public List<Despesas> PesquisarPorDescricao(string descricaoPesquisada)
+        public List<Despesas> PesquisarPorDescricao(string descricaoPesquisada, string usuarioId)
         {
             if (string.IsNullOrWhiteSpace(descricaoPesquisada))
             {
                 throw new ArgumentException("Por favor, digite o nome da despesa!");
             }
 
-            return _repository.PesquisarPorDescricao(descricaoPesquisada);
+            return _repository.PesquisarPorDescricao(descricaoPesquisada, usuarioId);
         }
 
-        public List<Despesas> FiltrarDespesasPorCategoria(string categoriaPesquisada)
+        public List<Despesas> FiltrarDespesasPorCategoria(string categoriaPesquisada, string usuarioId)
         {
             if (string.IsNullOrWhiteSpace(categoriaPesquisada))
             {
                 throw new ArgumentException("Por favor, digite uma categoria!");
             }
 
-            return _repository.PesquisarPorCategoria(categoriaPesquisada);
+            return _repository.PesquisarPorCategoria(categoriaPesquisada, usuarioId);
         }
 
-        public List<Despesas> FiltrarDespesasPorData(int mesPesquisado, int anoPesquisado)
+        public List<Despesas> FiltrarDespesasPorData(int mesPesquisado, int anoPesquisado, string usuarioId)
         {
             if (mesPesquisado < 1 || mesPesquisado > 12 )
             {
@@ -159,17 +166,17 @@ namespace Contta.Services
                 throw new ArgumentException("Digite um ano válido!");
             }
 
-            return _repository.PesquisarPorData(mesPesquisado, anoPesquisado);
+            return _repository.PesquisarPorData(mesPesquisado, anoPesquisado, usuarioId);
         }
 
-        public List<Despesas> PesquisarPorValor(decimal valor)
+        public List<Despesas> PesquisarPorValor(decimal valor, string usuarioId)
         {
             if (valor <= 0)
             {
                 throw new ArgumentException("Digite um valor maior que 0");
             }
 
-            return _repository.PesquisarPorValor(valor);
+            return _repository.PesquisarPorValor(valor, usuarioId);
         }
     }
 }

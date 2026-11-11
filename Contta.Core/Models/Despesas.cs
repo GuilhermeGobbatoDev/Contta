@@ -11,6 +11,7 @@ namespace Contta.Models
         public string Categoria { get; set; } = string.Empty;
         public DateTime Data { get; set; }
         public int Id { get; set; }
+        public string UsuarioId { get; set; } = string.Empty;
     }
 
 }
