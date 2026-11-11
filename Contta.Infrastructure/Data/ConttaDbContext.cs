@@ -22,6 +22,8 @@ namespace Contta.Infrastructure.Data
 
             modelBuilder.Entity<Despesas>().Property(despesa => despesa.Data).HasColumnType("date");
 
+            modelBuilder.Entity<Despesas>().HasOne<ApplicationUser>().WithMany().HasForeignKey(despesa => despesa.UsuarioId).OnDelete(DeleteBehavior.Restrict);
+
         }
     }
 }
