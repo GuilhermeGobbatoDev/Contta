@@ -7,9 +7,9 @@ import ExpensesTable from './components/ExpensesTable'
 import ExpenseModal from './components/ExpenseModal'
 import './App.css'
 
-const API_URL = 'https://localhost:7264/api/despesas'
+const API_URL = 'http://localhost:5013/api/despesas'
 
-export default function App() {
+export default function App({ token }) {
     const [expenses, setExpenses] = useState([])
     const [page, setPage] = useState('visao-geral')
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -48,7 +48,11 @@ export default function App() {
                 {
                     url = `${API_URL}/Despesa-Maior?valor=${filters.minValue}`
                 }
-                const resposta = await fetch(url)
+                const resposta = await fetch(url, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                })
 
                 if (!resposta.ok) {
                     throw new Error('Erro ao buscar despesas')
@@ -66,7 +70,7 @@ export default function App() {
         }
 
         carregarDespesas()
-    }, [filters.minValue])
+    }, [filters.minValue, token])
 
     // Remove automaticamente as notificações
     useEffect(() => {
@@ -111,7 +115,8 @@ export default function App() {
                 const resposta = await fetch(`${API_URL}/${id}`, {
                     method: 'PUT',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`
                     },
                     body: JSON.stringify(expense)
                 })
@@ -147,7 +152,8 @@ export default function App() {
             const resposta = await fetch(API_URL, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 },
                 body: JSON.stringify(expense)
             })
@@ -172,7 +178,7 @@ export default function App() {
         }
     }
 
-    // DELETE - Ainda vamos integrar ao banco
+    // DELETE - Excluir despesa do PostgreSQL
     async function deleteExpense(expense) {
         const confirmar = window.confirm(
             `Tem certeza que deseja excluir "${expense.descricao}"?`
@@ -182,7 +188,10 @@ export default function App() {
 
         try {
             const resposta = await fetch(`${API_URL}/${expense.id}`, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             })
 
             if (!resposta.ok) {
